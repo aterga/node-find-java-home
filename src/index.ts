@@ -61,7 +61,7 @@ async function findJavaHome(optionsOrCb: findJavaHome.IOptions | Callback, optio
     cb(err, res);
 }
 
-findJavaHome.promise = findJavaHomePromise()
+//findJavaHome.promise = findJavaHomePromise()
 
 async function findJavaHomePromise(options?: findJavaHome.IOptions): Promise<string | null> {
     const allowJre: boolean = !!(options && options.allowJre);
