@@ -29,28 +29,15 @@ const jreRegistryKeyPaths: string[] = [
     "\\SOFTWARE\\JavaSoft\\Java Runtime Environment"
 ];
 
-declare namespace findJavaHome {
-    interface IOptions {
-        allowJre: boolean;
-        registry?: RegArch;
-    }
+interface IOptions {
+    allowJre: boolean;
+    registry?: RegArch;
 }
+
 type RegArch = "x86" | "x64";
 type Callback = (err: Error, res: any) => void;
 
-function findJavaHome(cb: Callback): void;
-function findJavaHome(options: findJavaHome.IOptions, cb: Callback): void;
-async function findJavaHome(optionsOrCb: findJavaHome.IOptions | Callback, optional?: Callback) {
-    let cb: Callback;
-    let options: findJavaHome.IOptions | undefined;
-    if (!optional) {
-        cb = <Callback>optionsOrCb;
-        options = undefined;
-    } else {
-        options = <findJavaHome.IOptions>optionsOrCb;
-        cb = optional;
-    }
-
+async function findJavaHome(options: IOptions, cb: Callback) {
     let res = undefined;
     let err = null;
     try {
@@ -61,9 +48,7 @@ async function findJavaHome(optionsOrCb: findJavaHome.IOptions | Callback, optio
     cb(err, res);
 }
 
-//findJavaHome.promise = findJavaHomePromise()
-
-async function findJavaHomePromise(options?: findJavaHome.IOptions): Promise<string | null> {
+async function findJavaHomePromise(options?: IOptions): Promise<string | null> {
     const allowJre: boolean = !!(options && options.allowJre);
     const JAVA_FILENAME = (allowJre ? 'java' : 'javac') + (isWindows ? '.exe' : '');
     // Search both "x64" and "x86" registries for Java runtimes if not specified
